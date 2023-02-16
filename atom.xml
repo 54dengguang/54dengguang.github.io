@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-02-15T15:06:50.131Z</updated>
+  <updated>2023-02-16T23:37:52.359Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,20 +17,18 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>PCIE的结构</title>
-    <link href="http://example.com/interface/2023/02/15/PCIE%E7%9A%84%E7%BB%93%E6%9E%84/"/>
-    <id>http://example.com/interface/2023/02/15/PCIE%E7%9A%84%E7%BB%93%E6%9E%84/</id>
-    <published>2023-02-15T14:39:42.000Z</published>
-    <updated>2023-02-15T15:06:50.131Z</updated>
+    <title>PCIE概述</title>
+    <link href="http://example.com/interface/2023/02/17/1.PCIE/PCIE%E6%A6%82%E8%BF%B0/"/>
+    <id>http://example.com/interface/2023/02/17/1.PCIE/PCIE%E6%A6%82%E8%BF%B0/</id>
+    <published>2023-02-16T23:32:19.000Z</published>
+    <updated>2023-02-16T23:37:52.359Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="PCIE的总体结构"><a href="#PCIE的总体结构" class="headerlink" title="PCIE的总体结构"></a>PCIE的总体结构</h2><pre><code>    描述PCIE的总体结构测试文本缩进</code></pre><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href="201-202">PCIE扫盲 系列网文</a></li><li><a href="">PCIE3.0规范</a></li><li><a href="">PCIE结构体系教材</a></li></ul></blockquote>]]></content>
+    <content type="html"><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>​PCIE对于硬件来说可能就是几根有特殊要求的差分线，但是一旦涉及到多个EP，增加了switch的时候，其电路也是蛮复杂的，不懂PCIE规范和一些基本的PCIE知识，可能都没办法把数据手册里面的提到的参数有效的整合起来，影响硬件设计的可靠性，轻者给软件和逻辑带来一些不必要的麻烦，重着也没啥改个版。（当然，我写这些的主要原因是，一旦调试出了问题，可以有理有据的说明是不是硬件问题）–其实我是想说有理有据的怼逻辑和软件。</p><h1 id="PCIE总体概述"><a href="#PCIE总体概述" class="headerlink" title="PCIE总体概述"></a>PCIE总体概述</h1><p>​在调试PCIE的设计电路中的时候，硬件工程师最想的是一上电，软件一测试，链路初始化成功了，皆大欢喜，这个时候软件能排除故障的手段就多多了，硬件基本万事大吉。但是事与愿违，一旦上电链路初始化不成功，就很尴尬了，排查起来就很尴尬了，闲话不多说，以下是笔者从网上众多资料和PCIE规范以及自己HDE的视角下的一些技术总结分享。本来想通过阅读资料，对PCIE进行全面的，整体的概述，但是貌似高估了自己的能力和花在看书的时间，只能记录自己的理解作为工程师设计PCIE电路时，特别是涉及到复杂switch的时候使用。</p><!--注：本文主要参考网络文章PCIE扫盲、PCIE SPEC 3.0和《PCIE 系统体系结构标准教材》（PCIE1.0）。--><h2 id="PCIE-简介"><a href="#PCIE-简介" class="headerlink" title="PCIE 简介"></a>PCIE 简介</h2><p>PCI-Express是继ISA和PCI总线之后的第三代I&#x2F;O总线，即3GIO。 由Intel在2001年的IDF上提出，由PCI-SIG（PCI特殊兴趣组织）认证发布后才改名为“PCI-Express”。它的主要优势就是数据传输速率高，另外还有抗干扰能力强，传输距离远，功耗低等优点。 </p><p>PCIe传输的数据从上到下，都是以packet的形式传输的，每个packet都是有其固定的格式的。</p><p><img src="/interface/2023/02/17/1.PCIE/PCIE%E6%A6%82%E8%BF%B0/image-20230216230832599.png" alt="image-20230216230832599"></p><p><strong>事务层</strong>的主要职责是创建（发送）或者解析（接收）TLP (Transaction Layer packet)，流量控制，QoS，事务排序等。</p><p><img src="/interface/2023/02/17/1.PCIE/PCIE%E6%A6%82%E8%BF%B0/image-20230216230932284.png" alt="image-20230216230932284"></p><p><strong>数据链路层</strong>的主要职责是创建（发送）或者解析（接收）DLLP(Data Link Layer packet)，Ack&#x2F;Nak协议（链路层检错和纠错），流控，电源管理等。</p><p><strong>物理层</strong>的主要职责是处理所有的Packet数据物理传输，发送端数据分发到各个Lane传输（stripe），接收端把各个Lane上的数据汇总起来（De-stripe），每个Lane上加扰（Scramble，目的是让0和1分布均匀，去除信道的电磁干扰EMI）去扰（De-scramble)，以及8&#x2F;10或者128&#x2F;130编码解码，等等。</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href>PCIE扫盲 系列网文</a></li><li><a href>PCIE3.0规范</a></li><li><a href>PCIE结构体系教材</a></li></ul></blockquote>]]></content>
     
     
       
       
-    <summary type="html">&lt;h2 id=&quot;PCIE的总体结构&quot;&gt;&lt;a href=&quot;#PCIE的总体结构&quot; class=&quot;headerlink&quot; title=&quot;PCIE的总体结构&quot;&gt;&lt;/a&gt;PCIE的总体结构&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;    描述PCIE的总体结构
-测试文本缩进
-&lt;/code&gt;&lt;/pr</summary>
+    <summary type="html">&lt;h1 id=&quot;序言&quot;&gt;&lt;a href=&quot;#序言&quot; class=&quot;headerlink&quot; title=&quot;序言&quot;&gt;&lt;/a&gt;序言&lt;/h1&gt;&lt;p&gt;​	PCIE对于硬件来说可能就是几根有特殊要求的差分线，但是一旦涉及到多个EP，增加了switch的时候，其电路也是蛮复杂的，不懂PCIE规</summary>
       
     
     
@@ -43,22 +41,18 @@
   </entry>
   
   <entry>
-    <title>PCIE概述</title>
-    <link href="http://example.com/interface/2023/02/15/PCIE%E6%A6%82%E8%BF%B0/"/>
-    <id>http://example.com/interface/2023/02/15/PCIE%E6%A6%82%E8%BF%B0/</id>
-    <published>2023-02-15T14:34:25.000Z</published>
-    <updated>2023-02-15T14:48:34.637Z</updated>
+    <title>PCIE的结构</title>
+    <link href="http://example.com/interface/2023/02/15/1.PCIE/PCIE%E7%9A%84%E7%BB%93%E6%9E%84/"/>
+    <id>http://example.com/interface/2023/02/15/1.PCIE/PCIE%E7%9A%84%E7%BB%93%E6%9E%84/</id>
+    <published>2023-02-15T14:39:42.000Z</published>
+    <updated>2023-02-15T15:30:42.688Z</updated>
     
-    <content type="html"><![CDATA[<p>开始PCIE的概述。</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href=""></a></li><li><a href=""></a></li></ul></blockquote>]]></content>
+    <content type="html"><![CDATA[<h2 id="PCIE的总体结构"><a href="#PCIE的总体结构" class="headerlink" title="PCIE的总体结构"></a>PCIE的总体结构</h2><p>&amp;nbsp; &amp;nbsp; 描述PCIE的总体结构<br>测试文本缩进</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href="201-202">PCIE扫盲 系列网文</a></li><li><a href>PCIE3.0规范</a></li><li><a href>PCIE结构体系教材</a></li></ul></blockquote>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;开始PCIE的概述。&lt;/p&gt;
-&lt;h2 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料&quot;&gt;&lt;/a&gt;参考资料&lt;/h2&gt;&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;</summary>
+    <summary type="html">&lt;h2 id=&quot;PCIE的总体结构&quot;&gt;&lt;a href=&quot;#PCIE的总体结构&quot; class=&quot;headerlink&quot; title=&quot;PCIE的总体结构&quot;&gt;&lt;/a&gt;PCIE的总体结构&lt;/h2&gt;&lt;p&gt;&amp;amp;nbsp; &amp;amp;nbsp; 描述PCIE的总体结构&lt;br&gt;测试文本缩</summary>
       
     
     
@@ -77,15 +71,16 @@
     <published>2023-02-14T23:28:39.000Z</published>
     <updated>2023-02-14T23:28:39.091Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href=""></a></li><li><a href=""></a></li></ul></blockquote>]]></content>
+    <content type="html"><![CDATA[<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href></a></li><li><a href></a></li></ul></blockquote>]]></content>
     
     
       
       
     <summary type="html">&lt;h2 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料&quot;&gt;&lt;/a&gt;参考资料&lt;/h2&gt;&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/l</summary>
+&lt;li&gt;&lt;a href&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/u</summary>
       
     
     
@@ -102,15 +97,16 @@
     <published>2023-02-14T23:25:56.000Z</published>
     <updated>2023-02-14T23:25:56.427Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href=""></a></li><li><a href=""></a></li></ul></blockquote>]]></content>
+    <content type="html"><![CDATA[<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href></a></li><li><a href></a></li></ul></blockquote>]]></content>
     
     
       
       
     <summary type="html">&lt;h2 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料&quot;&gt;&lt;/a&gt;参考资料&lt;/h2&gt;&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/l</summary>
+&lt;li&gt;&lt;a href&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/u</summary>
       
     
     
@@ -125,41 +121,19 @@
     <link href="http://example.com/interface/2023/02/14/%E6%8E%A5%E5%8F%A3%E6%A6%82%E8%BF%B0/"/>
     <id>http://example.com/interface/2023/02/14/%E6%8E%A5%E5%8F%A3%E6%A6%82%E8%BF%B0/</id>
     <published>2023-02-13T16:43:38.000Z</published>
-    <updated>2023-02-15T15:05:02.355Z</updated>
+    <updated>2023-02-15T15:33:55.394Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="接口概述"><a href="#接口概述" class="headerlink" title="接口概述"></a>接口概述</h2><pre><code>    在嵌入式开发中，不可避免的需要用到各式各样的总线接口，接口类post中间主要介绍常见的低速接口的规范标准，如RS232,RS422,RS485等，以及常用的高速接口的规范标准 如网口，PCIE,SRIO以及用于高速ADC的JESD204接口等。</code></pre>]]></content>
+    <content type="html"><![CDATA[<h2 id="接口概述"><a href="#接口概述" class="headerlink" title="接口概述"></a>接口概述</h2><p>在嵌入式开发中，不可避免的需要用到各式各样的总线接口，<br>接口类post中间主要介绍常见的低速接口的规范标准，<br>如RS232,RS422,RS485等，以及常用的高速接口的规范标准  如网口，PCIE,SRIO以及用于高速ADC的JESD204接口等。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;h2 id=&quot;接口概述&quot;&gt;&lt;a href=&quot;#接口概述&quot; class=&quot;headerlink&quot; title=&quot;接口概述&quot;&gt;&lt;/a&gt;接口概述&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;    在嵌入式开发中，不可避免的需要用到各式各样的总线接口，接口类post中间主要介绍常见的低速接口的规范</summary>
+    <summary type="html">&lt;h2 id=&quot;接口概述&quot;&gt;&lt;a href=&quot;#接口概述&quot; class=&quot;headerlink&quot; title=&quot;接口概述&quot;&gt;&lt;/a&gt;接口概述&lt;/h2&gt;&lt;p&gt;在嵌入式开发中，不可避免的需要用到各式各样的总线接口，&lt;br&gt;接口类post中间主要介绍常见的低速接口的规范标准，&lt;br&gt;如</summary>
       
     
     
     
     <category term="interface" scheme="http://example.com/categories/interface/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>写在前面</title>
-    <link href="http://example.com/undefined/2023/02/12/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2/"/>
-    <id>http://example.com/undefined/2023/02/12/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2/</id>
-    <published>2023-02-12T07:51:44.140Z</published>
-    <updated>2023-02-15T14:50:54.336Z</updated>
-    
-    <content type="html"><![CDATA[<p>​终于开始第一篇博客，感谢饺子的提醒。其实从2020刚毕业的时候就有想法，一定要构建自己的知识体系，那时候就有想法构建自己的博客，待到工作伊始，也确实开始了第一步构建博客框架，可惜那时候刚开始，就被各种各样的奇奇怪怪的事情给打断，一来二去，把这事给抛得一干二净。    </p><p>​不过总算是，亡羊补牢，为时未晚。在2023年的初始，提起来这个事情。不说多了，撸起袖子开干。一定依托博客平台，构建好知己的知识体系。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;​		终于开始第一篇博客，感谢饺子的提醒。其实从2020刚毕业的时候就有想法，一定要构建自己的知识体系，那时候就有想法构建自己的博客，待到工作伊始，也确实开始了第一步构建博客框架，可惜那时候刚开始，就被各种各样的奇奇怪怪的事情给打断，一来二去，把这事给抛得一干二净。    </summary>
-      
-    
-    
-    
-    <category term="前言" scheme="http://example.com/categories/%E5%89%8D%E8%A8%80/"/>
     
     
   </entry>
