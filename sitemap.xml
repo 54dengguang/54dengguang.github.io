@@ -11,9 +11,9 @@
   </url>
   
   <url>
-    <loc>http://example.com/interface/2023/02/17/1.PCIE/PCIE%E6%A6%82%E8%BF%B0/PCIE%E6%A6%82%E8%BF%B0/</loc>
+    <loc>http://example.com/interface/2023/02/17/1.PCIE/PCIE%E6%A6%82%E8%BF%B0/</loc>
     
-    <lastmod>2023-02-21</lastmod>
+    <lastmod>2023-02-22</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -21,15 +21,6 @@
   
   <url>
     <loc>http://example.com/interface/2023/02/14/%E6%8E%A5%E5%8F%A3%E6%A6%82%E8%BF%B0/</loc>
-    
-    <lastmod>2023-02-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/interface/2023/02/15/1.PCIE/PCIE%E7%9A%84%E7%BB%93%E6%9E%84/</loc>
     
     <lastmod>2023-02-15</lastmod>
     
@@ -110,14 +101,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/interface/PCIE/</loc>
-    <lastmod>2023-02-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/categories/DSP/</loc>
+    <loc>http://example.com/categories/interface/1-PCIE/</loc>
     <lastmod>2023-02-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -131,14 +115,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/interface/1-PCIE/</loc>
-    <lastmod>2023-02-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/categories/interface/1-PCIE/PCIE%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E6%A6%82%E8%BF%B0/</loc>
+    <loc>http://example.com/categories/DSP/</loc>
     <lastmod>2023-02-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
