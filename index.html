@@ -181,7 +181,16 @@
                             &nbsp;
                             DSP
                         </a>
-                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DSP/2023/02/15/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/">信号处理基础</a></li>  </ul> 
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            1.信号处理随笔
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DSP/2023/02/26/1.%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E9%9A%8F%E7%AC%94/%E9%98%BB%E6%8A%97%E6%B5%85%E8%B0%88/">阻抗浅谈</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/DSP/2023/02/15/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/">信号处理基础</a></li>  </ul> 
                     </li> 
                     
                     <li class="directory">
@@ -282,6 +291,105 @@
 </aside>
             
             <section id="main">
+        <article id="post-1.信号处理随笔/阻抗浅谈" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/DSP/">DSP</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/DSP/1-%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E9%9A%8F%E7%AC%94/">1.信号处理随笔</a>
+    </div>
+
+                        
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/DSP/2023/02/26/1.%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E9%9A%8F%E7%AC%94/%E9%98%BB%E6%8A%97%E6%B5%85%E8%B0%88/">
+            <time datetime="2023-02-26T04:54:43.000Z" itemprop="datePublished">2023-02-26</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/54dengguang/Wiki-site/raw/writing/source/_posts/DSP/1.信号处理随笔/阻抗浅谈.md"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/54dengguang/Wiki-site/edit/writing/source/_posts/DSP/1.信号处理随笔/阻抗浅谈.md"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/54dengguang/Wiki-site/commits/writing/source/_posts/DSP/1.信号处理随笔/阻抗浅谈.md"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/DSP/2023/02/26/1.%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E9%9A%8F%E7%AC%94/%E9%98%BB%E6%8A%97%E6%B5%85%E8%B0%88/">阻抗浅谈</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p></p><h2 id="电阻，阻抗和阻抗匹配"><a href="#电阻，阻抗和阻抗匹配" class="headerlink" title="电阻，阻抗和阻抗匹配"></a>电阻，阻抗和阻抗匹配</h2><p>曾经一段时间，受到电阻，阻抗和阻抗匹配的困扰。刚接触射频的时候，经常会有人跟我说，阻抗匹配为50欧姆，75欧姆或者100欧姆。但是PCB板回来后，你用万用表去测量试试会发现那段传输线可能连1欧姆都没有，笔者因此懵逼了好长一段时间。最近由于涉及到射频功率问题突然联想到阻抗匹配的问题，虽然也知道我们常说的阻抗匹配是是针对射频传输线问题来的，常说的50欧姆，100欧姆也是特性阻抗，而非万用表直流档位测试的电阻阻值。但是，如果不去详细记录下，总感觉不自在，因此有了以下资料总结。</p>
+<h2 id="电阻"><a href="#电阻" class="headerlink" title="电阻"></a>电阻</h2><p>电阻（Resistance）在<a target="_blank" rel="external nofollow noopener noreferrer" href="https://baike.baidu.com/item/%E7%89%A9%E7%90%86%E5%AD%A6/313183?fromModule=lemma_inlink">物理学</a>中表示<a target="_blank" rel="external nofollow noopener noreferrer" href="https://baike.baidu.com/item/%E5%AF%BC%E4%BD%93/1017277?fromModule=lemma_inlink">导体</a>对<a target="_blank" rel="external nofollow noopener noreferrer" href="https://baike.baidu.com/item/%E7%94%B5%E6%B5%81/268192?fromModule=lemma_inlink">电流</a>阻碍作用的大小，导体的电阻越大。导体对流经的电流都会有或多或少的阻碍，其本质是<strong>不可逆的</strong>将电能转换为其它形式的能量。比如电路中的电阻，电热毯的发热丝，都是将电能转为热能耗散出去。白炽灯将热能转换为热与光。这个过程的本质是在电压下运动的电子与材料原子碰撞并将能量传给原子，原子再以辐射或传导方式将能量耗散掉。能量的转换也不只是“电子撞原子”这一种方式，比如电容的ESR（Equivalent Series Resistance，等效电阻）中就有一部分叫介质损耗，可以是电介质粒子在交变电场作用下不断翻转引起的电能到热能的转换。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+<ul>
+<li><a href></a></li>
+<p>
+                
+            
+        
+        
+            </p></ul></blockquote></div>   
+            <div class="article-more-link">
+                <a href="/DSP/2023/02/26/1.%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E9%9A%8F%E7%AC%94/%E9%98%BB%E6%8A%97%E6%B5%85%E8%B0%88/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
         <article id="post-1.PCIE/PCIE基础概念概述/PCIE基础概念概述" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -553,17 +661,17 @@
                 
                 
                     
-                    <p></p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+                    <p></p><p>EMC（ElectroMagnetic Compatibility）是笔者最近两年在项目中，时常需要面对的一个头疼问题。比硬件调试更加玄学，无论是模块级或者系统级的产品都需要考虑这方面。笔者认为EMC也是信号处理领域不可避免需要面对的问题，但苦于还没有形成系统或者有底气的理论知识，这边仅以收集学习和平常遇到的问题做记录以累计经验，主要会以EMC的基础知识，GJB151B和DO160G的解读为主要内容。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
 <ul>
 <li><a href></a></li>
 <li><a href></a></li>
-</ul>
 <p>
                 
             
         
         
-            </p></blockquote></div>   
+            </p></ul></blockquote></div>   
             <div class="article-more-link">
                 <a href="/EMC/2023/02/15/EMC%E5%9F%BA%E7%A1%80/#more">Read More</a>
             </div>
@@ -652,17 +760,17 @@
                 
                 
                     
-                    <p></p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+                    <p></p><p>DSP类（data signal process）的主要内容是对中频的信号处理硬件设计，理论，测试方面进行从最基础的概念到实际的设计测试过程的介绍。笔者主要介绍的是高速的ADC,DAC，运放以及信号处理的基础概念和理论，由于信号处理这一块注意的细节，单个设计所带来的理论知识非常的多，笔者至今未形成大的系统理论架构，只能是需要某个小点就开一个post来作为分享，再根据不同的应用场景选择性的会使用Matlab进行信号处理仿真 便于理解。等到笔者觉得可以写整个架构的时候再做所有内容的整理。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
 <ul>
 <li><a href></a></li>
 <li><a href></a></li>
-</ul>
 <p>
                 
             
         
         
-            </p></blockquote></div>   
+            </p></ul></blockquote></div>   
             <div class="article-more-link">
                 <a href="/DSP/2023/02/15/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/#more">Read More</a>
             </div>
